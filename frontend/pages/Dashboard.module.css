@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darkest: #2d3142;
+  --semi-dark: #4f5d75;
+  --bg-dark: #bfc0c0;
+  --bg-light: #f9fafb;
+  --bg-semi-light: #f8f8f8;
+  --bg-semi-dark: #ededee;
+  --accent: #ef8354;
+  --btn-bg: #f38b5f;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: min-content auto;
+}
+
+SideBar {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.body {
+  margin-top: 80px;
+  grid-column: 2;
+  grid-row: 1;
+}

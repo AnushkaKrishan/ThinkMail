@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darkest: #2d3142;
+  --semi-dark: #4f5d75;
+  --bg-dark: #bfc0c0;
+  --bg-light: #f9fafb;
+  --bg-semi-light: #f8f8f8;
+  --bg-semi-dark: #ededee;
+  --accent: #ef8354;
+  --btn-bg: #f38b5f;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.mailCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--bg-dark);
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.mailCard:hover {
+  background-color: var(--bg-semi-dark);
+}
+
+.mailCard div {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.mailCard .emailID {
+  width: 25%;
+  font-weight: 500;
+  color: var(--darkest);
+}
+
+.mailCard .senderName {
+  width: 20%;
+  color: var(--semi-dark);
+}
+
+.mailCard .sentTime {
+  width: 15%;
+  color: var(--semi-dark);
+  font-size: 0.875rem;
+}
+
+.mailCard .snippet {
+  width: 35%;
+  color: var(--semi-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mailCard .star {
+  border: none;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.mailCard .star:hover {
+  background-color: var(--bg-dark);
+}
+
+.mailCard .star svg {
+  align-self: center;
+
+  fill: var(--darkest);
+}
+
+@media (max-width: 768px) {
+  .mailCard {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .mailCard .emailID,
+  .mailCard .senderName {
+    width: 50%;
+  }
+
+  .mailCard .sentTime {
+    width: 30%;
+  }
+
+  .mailCard .snippet {
+    width: 60%;
+  }
+
+  .mailCard .star {
+    width: 10%;
+  }
+}

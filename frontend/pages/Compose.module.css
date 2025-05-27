@@ -1,0 +1,411 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darkest: #2d3142;
+  --semi-dark: #4f5d75;
+  --bg-dark: #bfc0c0;
+  --bg-light: #f9fafb;
+  --bg-semi-light: #f8f8f8;
+  --bg-semi-dark: #ededee;
+  --accent: #ef8354;
+  --btn-bg: #f38b5f;
+  --accent-light: #fdc9b3;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: Rubik, sans-serif;
+}
+
+.outerBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10vh;
+  height: 90vh;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+.composeForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 24px;
+  overflow-y: auto;
+}
+
+.recipientRow,
+.subjectRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  min-height: 40px;
+}
+
+.recipientRow label,
+.subjectRow label {
+  width: 60px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+  transition: border-color 0.2s;
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--darkest);
+}
+
+.inputWrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.subjectInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.subjectInput:focus {
+  border-color: var(--semi-dark);
+}
+
+.recipientActions {
+  display: flex;
+  gap: 8px;
+}
+
+.ccButton {
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.ccButton:hover {
+  background-color: #f3f4f6;
+  color: var(--semi-dark);
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.iconButton:hover {
+  background-color: #f3f4f6;
+  color: var(--semi-dark);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.toolbar button:hover {
+  background-color: #f3f4f6;
+  color: var(--semi-dark);
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e7eb;
+  margin: 0 8px;
+}
+
+.editor {
+  flex: 1;
+  min-height: 200px;
+  padding: 16px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  overflow-y: auto;
+}
+
+.editor:empty:before {
+  content: attr(placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.attachments {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.attachments h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+}
+
+.attachmentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.attachmentItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.fileName {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileSize {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.removeAttachment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.removeAttachment:hover {
+  color: #ef4444;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.leftActions,
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sendButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sendButton:hover {
+  background-color: var(--darkest);
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.actionButton:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.iconTextButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.iconTextButton:hover {
+  background-color: #f3f4f6;
+}
+
+.savedIndicator {
+  font-size: 12px;
+  color: #65a30d;
+}
+
+.savingIndicator {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Drag and drop */
+.dragover {
+  background-color: rgba(59, 130, 246, 0.05);
+  border: 2px dashed var(--accent);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .header,
+  .footer {
+    padding: 12px 16px;
+  }
+
+  .composeForm {
+    padding: 12px 16px;
+  }
+
+  .recipientRow label,
+  .subjectRow label {
+    width: 50px;
+    font-size: 13px;
+  }
+
+  .toolbar {
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .rightActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .leftActions {
+    width: 100%;
+  }
+
+  .sendButton {
+    flex: 1;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,112 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darkest: #2d3142;
+  --semi-dark: #4f5d75;
+  --bg-dark: #bfc0c0;
+  --bg-light: #f9fafb;
+  --accent: #ef8354;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.container {
+  background-color: var(--bg-light);
+  color: var(--darkest);
+  font-family: Rubik, sans-serif;
+  font-size: 2rem;
+  gap: 10px;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.companyName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bg-light);
+  padding: 2.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.img {
+  display: none;
+}
+
+.box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.box h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.box p {
+  color: var(--bg-dark);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.signupBox {
+  height: 300px;
+  justify-items: center;
+}
+
+.signIn {
+  cursor: pointer;
+  padding: 0.5rem 3rem;
+  height: fit-content;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--accent);
+}
+
+button .existing {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--bg-light);
+}
+
+.existing span {
+  color: var(--darkest);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (min-width: 912px) {
+  .container {
+    flex-direction: row;
+  }
+
+  .img {
+    display: block;
+    width: 50%;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  .box {
+    width: 50%;
+    padding: 2rem;
+  }
+}
