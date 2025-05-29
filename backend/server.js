@@ -5,7 +5,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import connectDb from "./mongoDbconfig.js";
-import { User, Summaries } from "./schema.js";
+import { User, Summaries, Mail } from "./schema.js";
 
 const app = express();
 dotenv.config();
