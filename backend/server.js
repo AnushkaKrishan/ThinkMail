@@ -21,11 +21,17 @@ app.use(
 );
 
 connectDb();
-function authMiddleware(req, res, next) {
+async function findUser(given) {
+  const user = await User.findOne({ email: given });
+  return user.refresh_token;
+}
+
+async function authMiddleware(req, res, next) {
   try {
     const token = req.cookies.user;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
+    req.user.refreshToken = await findUser(req.user.email);
     next();
   } catch (e) {
     console.log(e);
@@ -34,6 +40,27 @@ function authMiddleware(req, res, next) {
 }
 
 app.use("/private", authMiddleware);
+
+async function generateAccessToken(refresh) {
+  try {
+    const response = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        grant_type: "refresh_token",
+        refresh_token: refresh,
+      }),
+    });
+    const data = await response.json();
+    return data.access_token;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function getUserData(access_token) {
   const response = await fetch(
@@ -56,6 +83,14 @@ async function getUserEmails(access_token) {
   return data;
 }
 
+async function getEmailInfo(messageId, access_token) {
+  const response = await fetch(
+    `https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}`,
+    { headers: { Authorization: `Bearer ${access_token}` } }
+  );
+  const data = await response.json();
+  return data.payload;
+}
 /////////////////////////////////
 app.get("/auth/callback", async (req, res) => {
   const code = req.query.code;
@@ -87,14 +122,20 @@ app.get("/auth/callback", async (req, res) => {
         expiresIn: "1h",
       }
     );
+    let userDoc = await User.findOne({ email: userDetails.email });
 
-    await User.create({
-      email: userDetails.email,
-      first_name: userDetails.given_name,
-      last_name: userDetails.family_name,
-      picture: userDetails.picture,
-      refresh_token: user.refresh_token,
-    });
+    if (!userDoc) {
+      await User.create({
+        email: userDetails.email,
+        first_name: userDetails.given_name,
+        last_name: userDetails.family_name,
+        picture: userDetails.picture,
+        refresh_token: user.refresh_token,
+      });
+    } else {
+      userDoc.refresh_token = user.refresh_token;
+      await userDoc.save();
+    }
 
     res.cookie("user", userJWT, {
       httpOnly: true,
@@ -102,6 +143,7 @@ app.get("/auth/callback", async (req, res) => {
       sameSite: "Lax",
       maxAge: 3600000,
     });
+
     res.redirect(`http://localhost:5173/dashboard`);
   } catch (e) {
     console.error(e);
@@ -135,18 +177,24 @@ app.post("/api/login", async (req, res, next) => {
   res.json({ URL: authorizeURL });
 });
 
-// app.get("/private/api/user-data", async (req, res) => {
-//   const user = req.user;
-//   console.log("user is", user);
-//   res.json(user);
-// });
+app.get("/private/api/mail-list", async (req, res) => {
+  const access_token = await generateAccessToken(req.user.refreshToken);
+  console.log(access_token);
+  const data = await getUserEmails(access_token);
+  res.json(data);
+});
 
-// app.get("/private/api/mail-list", async (req, res) => {
-//   const {email, first_name, last_name, picture} = req.user;
-
-//   const data = await getUserEmails(access_token);
-//   res.json(data);
-// });
+app.get("/private/api/mail-data", async (req, res) => {
+  // const { messageId, threadId } = req.body;
+  try {
+    const messageId = "195e1ea76605afa2";
+    const access_token = await generateAccessToken(req.user.refreshToken);
+    const data = await getEmailInfo(messageId, access_token);
+    res.json(data.parts);
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 app.listen(port, () => {
   console.log("Server Started...");
