@@ -4,11 +4,12 @@ import { OAuth2Client } from "google-auth-library";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import connectDb from "./mongoDbconfig.js";
+import { User, Summaries } from "./schema.js";
 
 const app = express();
 dotenv.config();
 const port = 3000;
-
 ///////////////
 app.use(cookieParser());
 app.use(express.json());
@@ -19,19 +20,20 @@ app.use(
   })
 );
 
-// function authMiddleware(req, res, next) {
-//   try {
-//     const token = req.cookies.user;
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     req.user = decoded;
-//     next();
-//   } catch (e) {
-//     console.log(e);
-//     return res.status(401).json({ message: "Unauthorized" });
-//   }
-// }
+connectDb();
+function authMiddleware(req, res, next) {
+  try {
+    const token = req.cookies.user;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (e) {
+    console.log(e);
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}
 
-// app.use("/private", authMiddleware);
+app.use("/private", authMiddleware);
 
 async function getUserData(access_token) {
   const response = await fetch(
@@ -76,8 +78,8 @@ app.get("/auth/callback", async (req, res) => {
     const userJWT = jwt.sign(
       {
         email: userDetails.email,
-        first_name: userDetails.first_name,
-        last_name: userDetails.last_name,
+        first_name: userDetails.given_name,
+        last_name: userDetails.family_name,
         picture: userDetails.picture,
       },
       process.env.JWT_SECRET,
@@ -86,16 +88,13 @@ app.get("/auth/callback", async (req, res) => {
       }
     );
 
-    // await prisma.user.create({
-    //   data: {
-    //     email: userDetails.email,
-    //     first_name: userDetails.given_name,
-    //     last_name: userDetails.family_name,
-    //     picture: userDetails.picture,
-    //     access_token: user.access_token,
-    //     refresh_token: user.refresh_token,
-    //   },
-    // });
+    await User.create({
+      email: userDetails.email,
+      first_name: userDetails.given_name,
+      last_name: userDetails.family_name,
+      picture: userDetails.picture,
+      refresh_token: user.refresh_token,
+    });
 
     res.cookie("user", userJWT, {
       httpOnly: true,
@@ -103,11 +102,10 @@ app.get("/auth/callback", async (req, res) => {
       sameSite: "Lax",
       maxAge: 3600000,
     });
-
     res.redirect(`http://localhost:5173/dashboard`);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
 
@@ -144,7 +142,8 @@ app.post("/api/login", async (req, res, next) => {
 // });
 
 // app.get("/private/api/mail-list", async (req, res) => {
-//   const access_token = req.cookies.access_token;
+//   const {email, first_name, last_name, picture} = req.user;
+
 //   const data = await getUserEmails(access_token);
 //   res.json(data);
 // });
