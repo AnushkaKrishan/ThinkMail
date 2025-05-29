@@ -38,6 +38,26 @@ const summarySchema = new mongoose.Schema({
   },
 });
 
+const mailSchema = new mongoose.Schema({
+  messageId: {
+    type: String,
+    required: true,
+  },
+  threadId: {
+    type: String,
+    required: true,
+  },
+  mailText: {
+    type: String,
+    required: true,
+  },
+  isSpam: {
+    type: Boolean,
+    required: false,
+  },
+});
+
+const Mail = mongoose.models.Mail || mongoose.model("Mail", mailSchema);
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 const Summaries =
   mongoose.models.Summaries || mongoose.model("Summaries", summarySchema);
