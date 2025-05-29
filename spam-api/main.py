@@ -25,7 +25,7 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
         return [self.preprocess(text) for text in X]
 
 # load the saved pipeline
-pipeline = joblib.load('ThinkMail\spam-api\spam_pipeline.pkl')
+pipeline = joblib.load('spam_pipeline.pkl')
 
 def predict_spam(email_text):
     prediction = pipeline.predict([email_text])
