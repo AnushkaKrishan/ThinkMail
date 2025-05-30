@@ -5,17 +5,26 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 import nltk
 from preprocessor import TextPreprocessor
-
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import JSONResponse
+import joblib
+import nltk
 
 nltk.download('stopwords')
 
+app = FastAPI()
 
-# load the saved pipeline
+# Load the saved pipeline
 pipeline = joblib.load('spam_pipeline.pkl')
 
-def predict_spam(email_text):
+@app.post("/predict")
+async def predict_spam_endpoint(email_text: str = Form(...)):
     prediction = pipeline.predict([email_text])
-    return "Spam" if prediction[0] == 1 else "Not Spam"
+    result = "Spam" if prediction[0] == 1 else "Not Spam"
+    return JSONResponse(content={"prediction": result})
+
+
+
 
 
 
