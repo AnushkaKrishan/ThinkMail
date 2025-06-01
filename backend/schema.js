@@ -62,4 +62,4 @@ const User = mongoose.models.User || mongoose.model("User", userSchema);
 const Summaries =
   mongoose.models.Summaries || mongoose.model("Summaries", summarySchema);
 
-export { User, Summaries };
+export { User, Summaries, Mail };

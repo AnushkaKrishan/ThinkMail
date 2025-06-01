@@ -188,9 +188,38 @@ app.get("/private/api/mail-data", async (req, res) => {
   // const { messageId, threadId } = req.body;
   try {
     const messageId = "195e1ea76605afa2";
+    const threadId = "RANDOM";
     const access_token = await generateAccessToken(req.user.refreshToken);
     const data = await getEmailInfo(messageId, access_token);
-    res.json(data.parts);
+    const partsArr = data.parts;
+    let bodyText = "";
+    partsArr.forEach((element) => {
+      if (element.mimeType === "text/plain") {
+        bodyText += element.body.data;
+      }
+    });
+    const formData = new URLSearchParams();
+    formData.append("email_text", bodyText);
+    const spamRes = await fetch("https://thinkmail-4.onrender.com/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formData.toString(),
+    });
+    const spamJSON = await spamRes.json();
+    let isSpam = false;
+    if (spamJSON.prediction == "Spam") {
+      isSpam = true;
+    }
+    console.log("SPAM IS", isSpam);
+    await Mail.create({
+      messageId: messageId,
+      threadId: threadId,
+      mailText: bodyText,
+      isSpam: isSpam,
+    });
+    res.json({ bodyText: bodyText });
   } catch (e) {
     console.log(e);
   }
