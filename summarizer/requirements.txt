@@ -1,3 +1,4 @@
 google-generativeai
 fastapi
 python-dotenv
+uvicorn
