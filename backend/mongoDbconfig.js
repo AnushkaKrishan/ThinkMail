@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
+dotenv.config();
 function connectDb() {
-  const connectStr = "mongodb://localhost:27017/Thinkmail";
   mongoose.set("strictQuery", true);
   const options = {
     useNewUrlParser: true,
@@ -9,7 +10,7 @@ function connectDb() {
   };
 
   mongoose
-    .connect(connectStr, options)
+    .connect(process.env.DATABASE_URL, options)
     .then(() => {
       console.log("connected");
     })

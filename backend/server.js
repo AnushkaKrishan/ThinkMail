@@ -181,6 +181,11 @@ app.get("/private/api/mail-list", async (req, res) => {
   const access_token = await generateAccessToken(req.user.refreshToken);
   console.log(access_token);
   const data = await getUserEmails(access_token);
+  await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $set: { mail_list: data } },
+    { new: true }
+  );
   res.json(data);
 });
 
@@ -200,7 +205,7 @@ app.get("/private/api/mail-data", async (req, res) => {
     });
     const formData = new URLSearchParams();
     formData.append("email_text", bodyText);
-    const spamRes = await fetch("https://thinkmail-4.onrender.com/predict", {
+    const spamRes = await fetch(process.env.SPAM_MODEL, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

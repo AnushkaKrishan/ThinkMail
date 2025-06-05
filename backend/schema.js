@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  mail_list: {
+    type: Object,
+    require: false,
+  },
 });
 
 const summarySchema = new mongoose.Schema({
