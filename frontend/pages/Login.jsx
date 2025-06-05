@@ -7,7 +7,7 @@ function navigate(url) {
 }
 
 async function auth() {
-  const response = await fetch("http://localhost:3000/api/login", {
+  const response = await fetch("http://localhost:3000/auth/login", {
     method: "POST",
   });
   const data = await response.json();
