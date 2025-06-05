@@ -43,6 +43,11 @@ const summarySchema = new mongoose.Schema({
 });
 
 const mailSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   messageId: {
     type: String,
     required: true,
@@ -53,11 +58,23 @@ const mailSchema = new mongoose.Schema({
   },
   mailText: {
     type: String,
-    required: true,
+    required: false,
+  },
+  sender: {
+    type: String,
+    required: false,
   },
   isSpam: {
     type: Boolean,
     required: false,
+  },
+  addedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  summarized: {
+    type: Boolean,
+    default: false,
   },
 });
 

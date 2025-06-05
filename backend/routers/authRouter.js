@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
-import { User, Summaries, Mail } from "./schema.js";
-import getUserData from "./utils/getUserData.js";
+import { User, Summaries, Mail } from "../schema.js";
+import getUserData from "../utils/getUserData.js";
 
 const authRouter = express.Router();
 dotenv.config();
